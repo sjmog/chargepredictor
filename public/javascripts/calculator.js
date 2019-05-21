@@ -1,4 +1,6 @@
 const form = document.getElementById('form');
+const chargingTimePerDaySlider = document.getElementById('chargingTimePerDaySlider');
+const chargingTimePerDayOutput = document.getElementById('chargingTimePerDayOutput');
 
 const numberOfChargersRequired = (data) => {
   const equation = 0.2214 + 
@@ -8,22 +10,23 @@ const numberOfChargersRequired = (data) => {
                   -0.288 * Number(data.get('fractionWhoLikeThisChargerType')) +
                   -0.024 * Number(data.get('chargingTimePerDay'))
 
-  console.log(equation)
-
   return equation * Number(data.get('numberOfEvs')) - Number(data.get('existingChargingPoints'))
+}
+
+const updateOutput = (value, output) => {
+  console.log('yo')
+  output.innerText = isNaN(value) ? "Error" : Math.ceil(value);
 }
 
 const processForm = (e) => {
   if (e.preventDefault) e.preventDefault();
-  const output = numberOfChargersRequired(new FormData(form));
-
-  document.getElementById('output').innerText = isNaN(output) ? "Error" : Math.ceil(output);
-  
+  updateOutput(numberOfChargersRequired(new FormData(form)), document.getElementById('output'));
   return false;
 }
 
-if (form.attachEvent) {
-  form.attachEvent("submit", processForm);
-} else {
-  form.addEventListener("submit", processForm);
-};
+const processOutput = (e) => {
+  updateOutput(e.target.value, chargingTimePerDayOutput)
+}
+
+form.addEventListener("submit", processForm);
+chargingTimePerDaySlider.addEventListener("input", processOutput)

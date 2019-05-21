@@ -16,7 +16,9 @@
     <input type="number" name="existingChargingPoints" />
 
     <label for="chargingTimePerDay">Average hours per day spent charging (e.g. hours chargers are working)</label>
-    <input type="number" name="chargingTimePerDay">
+    <input type="range" min=3 max=7 name="chargingTimePerDay" id="chargingTimePerDaySlider" value=3>
+
+    <div><span id="chargingTimePerDayOutput">3</span> hours</div>
 
     <label for="percentageWhoPublicCharge">Fraction of EV owners who use public charging (<1)</label>
     <!-- Viswanthan et al. found that 15–30% of EV owners use public charging -->
