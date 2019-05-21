@@ -1,18 +1,23 @@
 const form = document.getElementById('form');
 
 const numberOfChargersRequired = (data) => {
-  const chargersPerEv =
-    1000 * data.get('kwHPerMile') * data.get('distancePerDay') * data.get('percentageWhoPublicCharge') / 
-    data.get('chargerPower') * data.get('chargingTimePerDay')
+  const equation = 0.2214 + 
+                   0.216 * Number(data.get('kWhPerMile')) + 
+                   0.003 * Number(data.get('distancePerDay')) + 
+                   0.515 * Number(data.get('fractionWhoPublicCharge')) +
+                  -0.288 * Number(data.get('fractionWhoLikeThisChargerType')) +
+                  -0.024 * Number(data.get('chargingTimePerDay'))
 
-  return data.get('existingChargingPoints') - chargersPerEv * data.get('numberOfEvs')
+  console.log(equation)
+
+  return equation * Number(data.get('numberOfEvs')) - Number(data.get('existingChargingPoints'))
 }
 
 const processForm = (e) => {
   if (e.preventDefault) e.preventDefault();
   const output = numberOfChargersRequired(new FormData(form));
 
-  document.getElementById('output').innerText = isNaN(output) ? "Error" : output;
+  document.getElementById('output').innerText = isNaN(output) ? "Error" : Math.ceil(output);
   
   return false;
 }

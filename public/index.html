@@ -8,20 +8,32 @@
 <body>
   <h1>How many electric charging points do you need to build?</h1>
   <form id="form">
-    <label for="existingChargingPoints"># of Existing Charging Points</label>
-    <input type="number" name="existingChargingPoints" />
-    <label for="kWhPerMile">Average EV kWh per mile</label>
-    <input type="number" name="kWhPerMile" />
-    <label for="distancePerDay">Average EV distance driven per day</label>
-    <input type="number" name="distancePerDay" />
-    <label for="percentageWhoPublicCharge">% of EV owners who use public charging</label>
-    <input type="number" name="percentageWhoPublicCharge">
-    <label for="chargerPower">Power of charger</label>
-    <input type="number" name="chargerPower">
-    <label for="chargingTimePerDay">Average hours per day spent charging</label>
-    <input type="number" name="chargingTimePerDay">
+
     <label for="numberOfEvs">Predicted number of EVs in the region</label>
     <input type="number" name="numberOfEvs">
+
+    <label for="existingChargingPoints"># of Existing Charging Points</label>
+    <input type="number" name="existingChargingPoints" />
+
+    <label for="chargingTimePerDay">Average hours per day spent charging (e.g. hours chargers are working)</label>
+    <input type="number" name="chargingTimePerDay">
+
+    <label for="percentageWhoPublicCharge">Fraction of EV owners who use public charging (<1)</label>
+    <!-- Viswanthan et al. found that 15–30% of EV owners use public charging -->
+    <input type="number" name="fractionWhoPublicCharge" value=0.15>
+
+    <label for="kWhPerMile">Average EV kWh per mile</label>
+    <!-- default kWhPerMile is for a Prius -->
+    <input type="number" name="kWhPerMile" value=0.4 />
+
+    <label for="distancePerDay">Average EV distance driven per day</label>
+    <!-- 96% of one-way journeys are under 20 miles, so 40 is a sensible default -->
+    <input type="number" name="distancePerDay" value=40 />
+
+    <label for="chargerPower">Fraction of EV owners who like this charger type</label>
+    <!-- Viswathan et al. found that around 90% of people are fine with L2 chargers -->
+    <input type="number" name="fractionWhoLikeThisChargerType" value=0.9>
+
     <button type="submit">Go</button>
   </form>
 
