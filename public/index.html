@@ -6,8 +6,28 @@
 </head>
 
 <body>
-  <h1>Express</h1>
-  <p>Welcome to Express</p>
+  <h1>How many electric charging points do you need to build?</h1>
+  <form id="form">
+    <label for="existingChargingPoints"># of Existing Charging Points</label>
+    <input type="number" name="existingChargingPoints" />
+    <label for="kWhPerMile">Average EV kWh per mile</label>
+    <input type="number" name="kWhPerMile" />
+    <label for="distancePerDay">Average EV distance driven per day</label>
+    <input type="number" name="distancePerDay" />
+    <label for="percentageWhoPublicCharge">% of EV owners who use public charging</label>
+    <input type="number" name="percentageWhoPublicCharge">
+    <label for="chargerPower">Power of charger</label>
+    <input type="number" name="chargerPower">
+    <label for="chargingTimePerDay">Average hours per day spent charging</label>
+    <input type="number" name="chargingTimePerDay">
+    <label for="numberOfEvs">Predicted number of EVs in the region</label>
+    <input type="number" name="numberOfEvs">
+    <button type="submit">Go</button>
+  </form>
+
+  <div>You need to build <span id="output"></span> Charging Points.</div>
+
+  <script src="/javascripts/calculator.js"></script>
 </body>
 
 </html>
