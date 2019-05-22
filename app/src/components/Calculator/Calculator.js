@@ -13,8 +13,8 @@ class Calculator extends React.Component {
     const equation = 0.2214 + 
                      0.216 * Number(data.get('kWhPerMile')) + 
                      0.003 * Number(data.get('distancePerDay')) + 
-                     0.515 * Number(data.get('fractionWhoPublicCharge')) +
-                    -0.288 * Number(data.get('fractionWhoLikeThisChargerType')) +
+                     0.515 * Number(data.get('percentageWhoPublicCharge')) +
+                     0.288 * Number(data.get('percentageWhoLikeThisChargerType')) +
                     -0.024 * Number(data.get('chargingTimePerDay'))
 
     return equation * Number(data.get('numberOfEvs')) - Number(data.get('existingChargingPoints'))
@@ -45,10 +45,6 @@ class Calculator extends React.Component {
     this.props.toggle()
   }
 
-  recalculate = () => {
-    console.log('recalcing')
-  }
-
   render() {
       return (
           <div className={`Calculator ${this.props.in ? "Calculator--in" : ""}`}>
@@ -63,7 +59,7 @@ class Calculator extends React.Component {
                 max={30000} 
                 step={1000}
                 defaultValue={3000}
-                onInput={this.recalculate} />
+                onInput={this.processForm} />
 
               <Slider
                 name={"existingChargingPoints"} 
@@ -72,7 +68,7 @@ class Calculator extends React.Component {
                 max={1000} 
                 step={100}
                 defaultValue={200}
-                onInput={this.recalculate} />
+                onInput={this.processForm} />
 
               <Slider
                 name={"chargingTimePerDay"} 
@@ -81,7 +77,7 @@ class Calculator extends React.Component {
                 max={7} 
                 step={1}
                 defaultValue={3}
-                onInput={this.recalculate} />
+                onInput={this.processForm} />
 
               <Slider
                 name={"percentageWhoPublicCharge"} 
@@ -90,7 +86,7 @@ class Calculator extends React.Component {
                 max={1} 
                 step={0.05}
                 defaultValue={0.15}
-                onInput={this.recalculate} />
+                onInput={this.processForm} />
 
               <Slider
                 name={"kWhPerMile"} 
@@ -99,7 +95,7 @@ class Calculator extends React.Component {
                 max={1} 
                 step={0.1}
                 defaultValue={0.4}
-                onInput={this.recalculate} />
+                onInput={this.processForm} />
 
               <Slider
                 name={"distancePerDay"} 
@@ -108,16 +104,16 @@ class Calculator extends React.Component {
                 max={100} 
                 step={10}
                 defaultValue={40}
-                onInput={this.recalculate} />
+                onInput={this.processForm} />
 
               <Slider
-                name={"fractionWhoLikeThisChargerType"} 
+                name={"percentageWhoLikeThisChargerType"} 
                 label={"Fraction of EV owners who like this charger type"}
                 min={0} 
                 max={1} 
                 step={0.1}
                 defaultValue={0.9}
-                onInput={this.recalculate} />
+                onInput={this.processForm} />
 
               <button type="submit">Go</button>
             </form>
