@@ -72,7 +72,7 @@ class Map extends React.Component {
             },
             'paint': {
                 'circle-color': '#69AEFF',
-                'circle-radius': 10
+                'circle-radius': 3
             },
             'minzoom': 5
         });
