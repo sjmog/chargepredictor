@@ -5,7 +5,7 @@ class Calculator extends React.Component {
   constructor(props) {
     super(props);
     this.formRef = React.createRef();
-    this.state = { output: null, in: false }
+    this.state = { output: null }
   }
 
   _numberOfChargersRequired = (data) => {
@@ -33,19 +33,22 @@ class Calculator extends React.Component {
 
   processForm = (e) => {
     if (e.preventDefault) e.preventDefault();
-    this._updateOutput(this._numberOfChargersRequired(new FormData(this.formRef.current)));
-    return false;
+    const numberOfNewChargingPoints = this._numberOfChargersRequired(new FormData(this.formRef.current));
+    this._updateOutput(numberOfNewChargingPoints);
+
+    this.props.onSubmit(numberOfNewChargingPoints);
   };
 
   toggle = () => {
-    this.setState({ in: !this.state.in })
+    this.setState({ output: null })
+    this.props.toggle()
   }
 
   render() {
       return (
-          <div class={`Calculator ${this.state.in ? "Calculator--in" : ""}`}>
+          <div className={`Calculator ${this.props.in ? "Calculator--in" : ""}`}>
             <h1>How many electric charging points do you need to build?</h1>
-            <div onClick={this.toggle} class={`toggle ${this.state.in ? "toggle--dismiss" : "toggle--summon"}`}></div>
+            <div onClick={this.toggle} className={`toggle ${this.props.in ? "toggle--dismiss" : "toggle--summon"}`}></div>
 
             <form onSubmit={this.processForm} ref={this.formRef} id="form">
 
