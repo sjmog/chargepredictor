@@ -30,7 +30,7 @@ _The current charging network in the Midlands. Usage is graded as "high use" (re
 ![A high-growth charging network by ~2025](./images/high-growth.png)
 _A high-growth network, assuming incentives to drive EV adoption and public charging._
 
-![A low-growth charging network by ~2025](./images/high-growth.png)
+![A low-growth charging network by ~2025](./images/low-growth.png)
 _A low-growth network, assuming limited EV adoption, increased efficiency, lower driving times, and lower public charging engagement._
 
 ### Extensions
