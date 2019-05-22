@@ -133,7 +133,7 @@ class Map extends React.Component {
             'type': 'circle',
             'source': "chargers",
             'layout': {
-                'visibility': 'none'
+                // 'visibility': 'none'
             },
             'paint': {
                 'circle-color': [
@@ -156,7 +156,7 @@ class Map extends React.Component {
             'source': "chargers",
             filter: ["has", "point_count"],
             'layout': {
-                'visibility': 'none'
+                // 'visibility': 'none'
             },
             'paint': {
                 'circle-color': 'white',
@@ -175,13 +175,11 @@ class Map extends React.Component {
                 "text-field": "{point_count_abbreviated}",
                 "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
                 "text-size": 12,
-                'visibility': 'none'
+                // 'visibility': 'none'
             },
             'minzoom': 5,
             'maxzoom': 8
         });
-
-        // map.getSource('')
 
         map.on('click', 'regions-layer', function (e) {
             this.props.updateRegionName(e.features[0].properties.regionName);
