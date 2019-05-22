@@ -110,11 +110,9 @@ class Map extends React.Component {
 
         map.addSource("chargers", {
             type: "geojson",
-            // Point to GeoJSON data. This example visualizes all M1.0+ earthquakes
-            // from 12/22/15 to 1/21/16 as logged by USGS' Earthquake hazards program.
             data: geojson,
             cluster: true,
-            clusterMaxZoom: 14, // Max zoom to cluster points on
+            clusterMaxZoom: 12, // Max zoom to cluster points on
             clusterRadius: 100 // Radius of each cluster when clustering points (defaults to 50)
         });
 
@@ -123,7 +121,16 @@ class Map extends React.Component {
             'type': 'circle',
             'source': "chargers",
             'paint': {
-                'circle-color': 'white'
+                'circle-color': [
+                    "step",
+                    ["get", "kW"],
+                    "#ABCF61",
+                    33,
+                    "#CFA361",
+                    66,
+                    "#CF616F"
+                ],
+                'circle-radius': 10
             },
             'minzoom': 5
         });
@@ -132,11 +139,13 @@ class Map extends React.Component {
             id: "clusters",
             type: "circle",
             'source': "chargers",
+            filter: ["has", "point_count"],
             'paint': {
                 'circle-color': 'white',
                 'circle-radius': 20
             },
-            'minzoom': 5
+            'minzoom': 5,
+            'maxzoom': 12
         });
 
         map.addLayer({
@@ -149,7 +158,8 @@ class Map extends React.Component {
                 "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
                 "text-size": 12
             },
-            'minzoom': 5
+            'minzoom': 5,
+            'maxzoom': 12
         });
 
         map.on('click', 'regions-layer', function (e) {
