@@ -7,6 +7,7 @@ class Calculator extends React.Component {
     super(props);
     this.formRef = React.createRef();
     this.state = { output: null }
+    this.SANITY_FACTOR = 0.1;
   }
 
   _numberOfChargersRequired = (data) => {
@@ -17,7 +18,10 @@ class Calculator extends React.Component {
                      0.288 * Number(data.get('percentageWhoLikeThisChargerType')) +
                     -0.024 * Number(data.get('chargingTimePerDay'))
 
-    return equation * Number(data.get('numberOfEvs')) - Number(data.get('existingChargingPoints'))
+    return(this.SANITY_FACTOR * 
+           equation * 
+           Number(data.get('numberOfEvs')) 
+         - Number(data.get('existingChargingPoints')))
   }
 
   _updateOutput = (value) => {

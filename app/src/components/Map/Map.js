@@ -185,6 +185,7 @@ class Map extends React.Component {
 
         map.on('click', 'regions-layer', function (e) {
             this.props.updateRegionName(e.features[0].properties.regionName);
+            this.props.showCalculator();
 
             let coordinates = e.features[0].geometry.coordinates[0];
 
