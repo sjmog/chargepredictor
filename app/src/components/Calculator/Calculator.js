@@ -1,5 +1,6 @@
 import React from 'react';
 import './Calculator.css';
+import Slider from '../Slider';
 
 class Calculator extends React.Component {
   constructor(props) {
@@ -44,34 +45,79 @@ class Calculator extends React.Component {
     this.props.toggle()
   }
 
+  recalculate = () => {
+    console.log('recalcing')
+  }
+
   render() {
       return (
           <div className={`Calculator ${this.props.in ? "Calculator--in" : ""}`}>
-            <h1>How many electric charging points do you need to build?</h1>
+            <h1>{this.props.regionName || "region"}</h1>
             <div onClick={this.toggle} className={`toggle ${this.props.in ? "toggle--dismiss" : "toggle--summon"}`}></div>
 
             <form onSubmit={this.processForm} ref={this.formRef} id="form">
+              <Slider
+                name={"numberOfEvs"} 
+                label={"Predicted number of EVs in the region"}
+                min={0} 
+                max={30000} 
+                step={1000}
+                defaultValue={3000}
+                onInput={this.recalculate} />
 
-              <label htmlFor={"numberOfEvs"}>Predicted number of EVs in the region</label>
-              <input type="number" name="numberOfEvs" />
+              <Slider
+                name={"existingChargingPoints"} 
+                label={"# of Existing Charging Points"}
+                min={0} 
+                max={1000} 
+                step={100}
+                defaultValue={200}
+                onInput={this.recalculate} />
 
-              <label htmlFor={"existingChargingPoints"}># of Existing Charging Points</label>
-              <input type="number" name="existingChargingPoints" />
+              <Slider
+                name={"chargingTimePerDay"} 
+                label={"Hours chargers work per day"}
+                min={3} 
+                max={7} 
+                step={1}
+                defaultValue={3}
+                onInput={this.recalculate} />
 
-              <label htmlFor={"chargingTimePerDay"}>Average hours per day spent charging (e.g. hours chargers are working)</label>
-              <input type="range" min={3} max={7} defaultValue={3} name="chargingTimePerDay" id="chargingTimePerDaySlider" />
+              <Slider
+                name={"percentageWhoPublicCharge"} 
+                label={"Fraction of EV owners who use public charging"}
+                min={0} 
+                max={1} 
+                step={0.05}
+                defaultValue={0.15}
+                onInput={this.recalculate} />
 
-              <label htmlFor={"percentageWhoPublicCharge"}>Fraction of EV owners who use public charging</label>
-              <input type="number" name="fractionWhoPublicCharge" defaultValue={0.15} />
+              <Slider
+                name={"kWhPerMile"} 
+                label={"Average EV kWh per mile"}
+                min={0} 
+                max={1} 
+                step={0.1}
+                defaultValue={0.4}
+                onInput={this.recalculate} />
 
-              <label htmlFor={"kWhPerMile"}>Average EV kWh per mile</label>
-              <input type="number" name="kWhPerMile" defaultValue={0.4} />
+              <Slider
+                name={"distancePerDay"} 
+                label={"Average EV distance driven per day"}
+                min={20} 
+                max={100} 
+                step={10}
+                defaultValue={40}
+                onInput={this.recalculate} />
 
-              <label htmlFor={"distancePerDay"}>Average EV distance driven per day</label>
-              <input type="number" name="distancePerDay" defaultValue={40} />
-
-              <label htmlFor={"chargerPower"}>Fraction of EV owners who like this charger type</label>
-              <input type="number" name="fractionWhoLikeThisChargerType" defaultValue={0.9} />
+              <Slider
+                name={"fractionWhoLikeThisChargerType"} 
+                label={"Fraction of EV owners who like this charger type"}
+                min={0} 
+                max={1} 
+                step={0.1}
+                defaultValue={0.9}
+                onInput={this.recalculate} />
 
               <button type="submit">Go</button>
             </form>
