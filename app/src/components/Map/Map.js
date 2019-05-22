@@ -7,7 +7,7 @@ import geojson from './chargers.geojson';
 import regionGeojson from './regions.geojson';
 
 import './Map.css';
-import { generateRandomPoints } from './util';
+import { generateRandomPoints, isInside, boundingBoxOfPolygon } from './util';
 
 const MapboxMap = ReactMapboxGl({
     accessToken: process.env.REACT_APP_MAPBOX_ACCESS_TOKEN
@@ -22,25 +22,32 @@ const symbolLayout: MapboxGL.SymbolLayout = {
 };
 
 class Map extends React.Component {
-    state = {
-        viewport: {
-            containerStyle: {
-                height: "100vh",
-                width: "100vw"
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            viewport: {
+                containerStyle: {
+                    height: "100vh",
+                    width: "100vw"
+                },
+                style: "mapbox://styles/adamhirst/cjvyau2i307tj1cmbvpywzl3d",
+                center: [-2.60933, 53.06325],
+                zoom: [6],
+                pitch: [50],
+                bearing: [-35]
             },
-            style: "mapbox://styles/adamhirst/cjvyau2i307tj1cmbvpywzl3d",
-            center: [-2.60933, 53.06325],
-            zoom: [6],
-            pitch: [50],
-            bearing: [-35]
-        },
-        numNewChargers: 0,
-        selectedPoly: undefined
-    };
+            numNewChargers: this.props.numNewChargers,
+            selectedPoly: undefined
+        }
+    }
 
     componentDidUpdate(oldProps) {
         if (this.state.selectedPoly == undefined) return;
-        let newPoints = generateRandomPoints(this.state.numNewChargers, this.state.selectedPoly);
+        if (this.props.numNewChargers <= 0) return;
+        if (this.state.numNewChargers == this.props.numNewChargers) return;
+        this.setState({ numNewChargers: this.props.numNewChargers });
+        let newPoints = generateRandomPoints(this.state.selectedPoly, this.state.numNewChargers);
 
         let markers = newPoints.map(x => {
             return {
@@ -64,16 +71,21 @@ class Map extends React.Component {
                 }
             },
             'paint': {
-                'circle-color': 'blue'
+                'circle-color': '#69AEFF',
+                'circle-radius': 10
             },
             'minzoom': 5
         });
     }
 
     removeMapLayer(layer) {
+        console.log('Q1');
         var mapLayer = this.map.getLayer(layer);
 
+        console.log('Q2');
         if(typeof mapLayer !== 'undefined') {
+
+            console.log('Q3');
             this.map.removeLayer(layer).removeSource(layer);
         }
     }
@@ -120,6 +132,9 @@ class Map extends React.Component {
             'id': 'chargers-layer',
             'type': 'circle',
             'source': "chargers",
+            'layout': {
+                // 'visibility': 'none'
+            },
             'paint': {
                 'circle-color': [
                     "step",
@@ -140,9 +155,12 @@ class Map extends React.Component {
             type: "circle",
             'source': "chargers",
             filter: ["has", "point_count"],
+            'layout': {
+                // 'visibility': 'none'
+            },
             'paint': {
                 'circle-color': 'white',
-                'circle-radius': 20
+                'circle-radius': 20,
             },
             'minzoom': 5,
             'maxzoom': 12
@@ -156,15 +174,20 @@ class Map extends React.Component {
             layout: {
                 "text-field": "{point_count_abbreviated}",
                 "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
-                "text-size": 12
+                "text-size": 12,
+                // 'visibility': 'none'
             },
             'minzoom': 5,
             'maxzoom': 12
         });
 
         map.on('click', 'regions-layer', function (e) {
-            var coordinates = e.features[0].geometry.coordinates[0];
-            var bounds = coordinates.reduce(function (bounds, coord) {
+            this.props.updateRegionName(e.features[0].properties.regionName);
+
+            let coordinates = e.features[0].geometry.coordinates[0];
+
+            this.setState({ selectedPoly: coordinates });
+            let bounds = coordinates.reduce(function (bounds, coord) {
                 return bounds.extend(coord);
             }, new MapboxGL.LngLatBounds(coordinates[0], coordinates[0]));
 
@@ -192,6 +215,13 @@ class Map extends React.Component {
                 },
                 'minzoom': 7
             })
+
+            // let features = this.map.queryRenderedFeatures(boundingBoxOfPolygon(coordinates), { layers: ['clusters', 'cluster-count', 'chargers-layer'] });
+            
+            // features.forEach(feature => {
+            //     feature.layout.visibility = 'visible';
+            // })
+
         }.bind(this));
     }
     

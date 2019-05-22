@@ -1,9 +1,10 @@
 {
-  "id": "regions",
   "features": [
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+        "regionName": "North West"
+      },
       "geometry": {
         "coordinates": [
           [
@@ -63,7 +64,9 @@
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+        "regionName": "Scotland"
+      },
       "geometry": {
         "coordinates": [
           [
@@ -127,7 +130,9 @@
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+        "regionName": "East Midlands"
+      },
       "geometry": {
         "coordinates": [
           [
@@ -187,7 +192,9 @@
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+        "regionName": "Scotland"
+      },
       "geometry": {
         "coordinates": [
           [
@@ -231,7 +238,9 @@
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+        "regionName": "South East"
+      },
       "geometry": {
         "coordinates": [
           [
@@ -323,7 +332,9 @@
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+        "regionName": "East of England"
+      },
       "geometry": {
         "coordinates": [
           [
@@ -387,7 +398,9 @@
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+        "regionName": "Northern Ireland"
+      },
       "geometry": {
         "coordinates": [
           [
@@ -503,7 +516,9 @@
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+        "regionName": "Wales"
+      },
       "geometry": {
         "coordinates": [
           [
@@ -544,7 +559,7 @@
               52.354772
             ],
             [
-              -4.176289,
+              -4.176288,
               52.874822
             ],
             [
@@ -607,7 +622,9 @@
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+        "regionName": "West Midlands"
+      },
       "geometry": {
         "coordinates": [
           [
@@ -663,7 +680,9 @@
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+        "regionName": "North East"
+      },
       "geometry": {
         "coordinates": [
           [
@@ -707,7 +726,9 @@
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+        "regionName": "Scotland"
+      },
       "geometry": {
         "coordinates": [
           [
@@ -879,7 +900,9 @@
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+        "regionName": "Yorkshire and the Humber"
+      },
       "geometry": {
         "coordinates": [
           [
@@ -935,7 +958,9 @@
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+        "regionName": "South West"
+      },
       "geometry": {
         "coordinates": [
           [
@@ -1019,7 +1044,9 @@
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+        "regionName": "London"
+      },
       "geometry": {
         "coordinates": [
           [

@@ -8,15 +8,23 @@ import Car from '../../components/Car';
 class MapPage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { calculatorIn: false }
+    this.state = { 
+        calculatorIn: false,
+        numberOfNewChargingPoints: 0,
+        regionName: ''
+    }
   }
 
   onCalculatorSubmit = (numberOfNewChargingPoints) => {
     // do something with the number of charging points on the map
-    console.log(numberOfNewChargingPoints)
+    this.setState({ numberOfNewChargingPoints });
     // return false in order to avoid form submission propagating to the window
     return false;
   };
+
+  updateRegionName = (newRegionName) => {
+      this.setState({ regionName: newRegionName });
+  }
 
   toggleCalculator = () => {
     console.log('woo')
@@ -27,8 +35,11 @@ class MapPage extends React.Component {
         return (
             <div>
             <Car />
-            <Map />
+            <Map
+              numNewChargers={this.state.numberOfNewChargingPoints}
+              updateRegionName={this.updateRegionName.bind(this)} />
             <Calculator 
+              regionName={this.state.regionName}
               in={this.state.calculatorIn} 
               onSubmit={this.onCalculatorSubmit.bind(this)}
               toggle={this.toggleCalculator.bind(this) } />
