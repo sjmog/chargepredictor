@@ -44,7 +44,7 @@ class Map extends React.Component {
 
     componentDidUpdate(oldProps) {
         if (this.state.selectedPoly == undefined) return;
-        if (this.props.numNewChargers <= 0) return;
+        if (this.props.numNewChargers <= 0) { this.removeMapLayer('new-chargers'); return; }
         if (this.state.numNewChargers == this.props.numNewChargers) return;
         this.setState({ numNewChargers: this.props.numNewChargers });
         let newPoints = generateRandomPoints(this.state.selectedPoly, this.state.numNewChargers);
@@ -72,11 +72,15 @@ class Map extends React.Component {
             },
             'paint': {
                 'circle-color': '#69AEFF',
-                'circle-radius': 3,
+                'circle-radius': 4,
                 'circle-opacity': 0.8
             },
-            'minzoom': 5
+            'minzoom': 7,
         });
+
+        console.log(markers.length);
+
+        this.map.resize();
     }
 
     removeMapLayer(layer) {
@@ -146,7 +150,7 @@ class Map extends React.Component {
                     66,
                     "#CF616F"
                 ],
-                'circle-radius': 3,
+                'circle-radius': 4,
                 'circle-opacity': 0.8
             },
             'minzoom': 5
@@ -195,8 +199,8 @@ class Map extends React.Component {
             }, new MapboxGL.LngLatBounds(coordinates[0], coordinates[0]));
 
             map.fitBounds(bounds, {
-                padding: 20,
-                offset: [-120, 0]
+                padding: 5,
+                offset: [-135, 0]
             });
 
             this.removeMapLayer('selected-region');
