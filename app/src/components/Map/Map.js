@@ -50,40 +50,51 @@ class Map extends React.Component {
             center: [-2.60933, 53.06325],
             zoom: [6],
             pitch: [50],
-            bearing: [-35],
-            mapStyle: fromJS({
-                version: 8,
-                sources: {
-                    points: {
-                        type: 'geojson',
-                        data: {
-                            type: 'FeatureCollection',
-                            features: [
-                                {type: 'Feature', geometry: {type: 'Point', coordinates: [-2.60933, 53.06325]}}
-                            ]
-                        }
-                    }
-                },
-                layers: [
-                    {
-                        id: 'my-layer',
-                        type: 'circle',
-                        source: 'points',
-                        paint: {
-                            'circle-color': '#f00',
-                            'circle-radius': 20
-                        }
-                    }
-                ]
-            })
+            bearing: [-35]
         }
     };
-        
+
+    onRegionSelect = (evt) => {
+        let bounds = evt.target.getBounds();
+        console.log(evt);
+        // this.map.fitBounds([[ bounds._ne.lng, bounds._ne.lat ], [ bounds._sw.lng, bounds._sw.lat ]]);
+        // console.log(this.map)
+    }
+
+    onStyleLoad = (map, evt) => {
+        this.map = map;
+
+        map.addLayer({
+            'id': 'regions-layer',
+            'type': 'fill',
+            'source': {
+            'type': 'geojson',
+            'data': regionGeojson
+            },
+            'paint': {
+                'fill-color': 'rgba(74, 144, 226, 0.28)'
+            }
+        });
+
+        map.on('click', 'regions-layer', function (e) {
+            var coordinates = e.features[0].geometry.coordinates[0];
+            var bounds = coordinates.reduce(function (bounds, coord) {
+                return bounds.extend(coord);
+            }, new MapboxGL.LngLatBounds(coordinates[0], coordinates[0]));
+
+            map.fitBounds(bounds, {
+                padding: 20
+            });
+
+        });
+    }
+    
     render() {
         return (
             <MapboxMap
                 className="map"
-                {...this.state.viewport}>
+                {...this.state.viewport}
+                onStyleLoad={this.onStyleLoad}>
                 <GeoJSONLayer
                     data={geojson}
                     circleLayout={circleLayout}
@@ -92,10 +103,11 @@ class Map extends React.Component {
                     symbolLayout={symbolLayout}
                     symbolPaint={symbolPaint}
                 />
-                <GeoJSONLayer
+                {/* <GeoJSONLayer
                     data={regionGeojson}
                     fillPaint={regionsPaint}
-                />
+                    fillOnClick={this.onRegionSelect}
+                /> */}
                 <GeoJSONLayer
                     data={regionGeojson}
                     linePaint={regionLinePaint}
