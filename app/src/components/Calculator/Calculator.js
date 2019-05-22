@@ -5,7 +5,7 @@ class Calculator extends React.Component {
   constructor(props) {
     super(props);
     this.formRef = React.createRef();
-    this.state = { output: null }
+    this.state = { output: null, in: false }
   }
 
   _numberOfChargersRequired = (data) => {
@@ -37,10 +37,16 @@ class Calculator extends React.Component {
     return false;
   };
 
+  toggle = () => {
+    this.setState({ in: !this.state.in })
+  }
+
   render() {
       return (
-          <div class="Calculator">
+          <div class={`Calculator ${this.state.in ? "Calculator--in" : ""}`}>
             <h1>How many electric charging points do you need to build?</h1>
+            <div onClick={this.toggle} class={`toggle ${this.state.in ? "toggle--dismiss" : "toggle--summon"}`}></div>
+
             <form onSubmit={this.processForm} ref={this.formRef} id="form">
 
               <label htmlFor={"numberOfEvs"}>Predicted number of EVs in the region</label>

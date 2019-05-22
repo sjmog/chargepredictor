@@ -1,15 +1,40 @@
 .Calculator {
   position: absolute;
   z-index: 5;
+  box-sizing: border-box;
   top: 0;
   right: 0;
   bottom: 0;
   width: 37.9vw;
   background: rgba(255,255,255,0.6);
   backdrop-filter: blur(4px);
-  padding: 2rem;
+  padding: 4rem 2rem;
+  transform: translateX(37.9vw);
 }
 
 input {
   display: block;
+}
+
+.Calculator--in {
+  transform: translateX(0);
+}
+
+.toggle {
+  position: absolute;
+  left: 2rem;
+  top: 2rem;
+}
+
+.toggle--summon {
+  left: -2rem;
+  color: white;
+}
+
+.toggle--summon:before {
+  content: "‹";
+}
+
+.toggle--dismiss:before {
+  content: "✕";
 }
