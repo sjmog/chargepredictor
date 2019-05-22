@@ -1,5 +1,6 @@
 import React from 'react';
 import Map from '../../components/Map';
+import Calculator from '../../components/Calculator';
 
 import './MapPage.css';
 import Car from '../../components/Car';
@@ -10,6 +11,7 @@ class MapPage extends React.Component {
             <div>
             <Car />
             <Map />
+            <Calculator />
             </div>
         )
     }
