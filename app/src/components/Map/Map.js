@@ -192,7 +192,7 @@ class Map extends React.Component {
             }, new MapboxGL.LngLatBounds(coordinates[0], coordinates[0]));
 
             map.fitBounds(bounds, {
-                padding: 20
+                padding: 5
             });
 
             this.removeMapLayer('selected-region');
