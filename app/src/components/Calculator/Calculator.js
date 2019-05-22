@@ -1,5 +1,6 @@
 import React from 'react';
 import './Calculator.css';
+import Slider from '../Slider';
 
 class Calculator extends React.Component {
   constructor(props) {
@@ -12,8 +13,8 @@ class Calculator extends React.Component {
     const equation = 0.2214 + 
                      0.216 * Number(data.get('kWhPerMile')) + 
                      0.003 * Number(data.get('distancePerDay')) + 
-                     0.515 * Number(data.get('fractionWhoPublicCharge')) +
-                    -0.288 * Number(data.get('fractionWhoLikeThisChargerType')) +
+                     0.515 * Number(data.get('percentageWhoPublicCharge')) +
+                     0.288 * Number(data.get('percentageWhoLikeThisChargerType')) +
                     -0.024 * Number(data.get('chargingTimePerDay'))
 
     return equation * Number(data.get('numberOfEvs')) - Number(data.get('existingChargingPoints'))
@@ -25,7 +26,7 @@ class Calculator extends React.Component {
 
   output = () => {
     if(this.state.output !== null) {
-      return <div>You need to build {this.state.output} Charging Points.</div>
+      return <div className={"Calculator__output"}>You need to build <span className={"output__value"}>{this.state.output}</span> Charging Points.</div>
     } else {
       return null;
     }
@@ -47,33 +48,79 @@ class Calculator extends React.Component {
   render() {
       return (
           <div className={`Calculator ${this.props.in ? "Calculator--in" : ""}`}>
-            <h1>How many electric charging points do you need to build?</h1>
+            <h1>{this.props.regionName || "region"}</h1>
             <div onClick={this.toggle} className={`toggle ${this.props.in ? "toggle--dismiss" : "toggle--summon"}`}></div>
 
             <form onSubmit={this.processForm} ref={this.formRef} id="form">
+              <Slider
+                name={"numberOfEvs"} 
+                label={"Predicted number of EVs in the region"}
+                min={0} 
+                max={30000} 
+                step={1000}
+                defaultValue={3000}
+                onInput={this.processForm} />
 
-              <label htmlFor={"numberOfEvs"}>Predicted number of EVs in the region</label>
-              <input type="number" name="numberOfEvs" />
+              <Slider
+                name={"existingChargingPoints"} 
+                label={"# of Existing Charging Points"}
+                min={0} 
+                max={1000} 
+                step={100}
+                defaultValue={200}
+                onInput={this.processForm} />
 
-              <label htmlFor={"existingChargingPoints"}># of Existing Charging Points</label>
-              <input type="number" name="existingChargingPoints" />
+              <Slider
+                name={"chargingTimePerDay"} 
+                label={"Hours chargers work per day"}
+                min={3} 
+                max={7} 
+                step={1}
+                defaultValue={3}
+                suffix={"h/day"}
+                onInput={this.processForm} />
 
-              <label htmlFor={"chargingTimePerDay"}>Average hours per day spent charging (e.g. hours chargers are working)</label>
-              <input type="range" min={3} max={7} defaultValue={3} name="chargingTimePerDay" id="chargingTimePerDaySlider" />
+              <Slider
+                name={"percentageWhoPublicCharge"} 
+                label={"Fraction of EV owners who use public charging"}
+                min={0} 
+                max={1} 
+                step={0.05}
+                defaultValue={0.15}
+                isPercentage={true}
+                suffix="%"
+                onInput={this.processForm} />
 
-              <label htmlFor={"percentageWhoPublicCharge"}>Fraction of EV owners who use public charging</label>
-              <input type="number" name="fractionWhoPublicCharge" defaultValue={0.15} />
+              <Slider
+                name={"kWhPerMile"} 
+                label={"Average EV kWh per mile"}
+                min={0} 
+                max={1} 
+                step={0.1}
+                defaultValue={0.4}
+                suffix={"kWh/mi"}
+                onInput={this.processForm} />
 
-              <label htmlFor={"kWhPerMile"}>Average EV kWh per mile</label>
-              <input type="number" name="kWhPerMile" defaultValue={0.4} />
+              <Slider
+                name={"distancePerDay"} 
+                label={"Average EV distance driven per day"}
+                min={20} 
+                max={100} 
+                step={10}
+                defaultValue={40}
+                suffix={"mi/day"}
+                onInput={this.processForm} />
 
-              <label htmlFor={"distancePerDay"}>Average EV distance driven per day</label>
-              <input type="number" name="distancePerDay" defaultValue={40} />
-
-              <label htmlFor={"chargerPower"}>Fraction of EV owners who like this charger type</label>
-              <input type="number" name="fractionWhoLikeThisChargerType" defaultValue={0.9} />
-
-              <button type="submit">Go</button>
+              <Slider
+                name={"percentageWhoLikeThisChargerType"} 
+                label={"Fraction of EV owners who like this charger type"}
+                min={0.5} 
+                max={1} 
+                step={0.1}
+                defaultValue={0.9}
+                isPercentage={true}
+                suffix={"%"}
+                onInput={this.processForm} />
             </form>
 
             {this.output()}
