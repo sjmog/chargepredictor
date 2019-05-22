@@ -15,6 +15,10 @@ class MapPage extends React.Component {
     }
   }
 
+  showCalculator = () => {
+    this.setState({calculatorIn: true})
+  }
+
   onCalculatorSubmit = (numberOfNewChargingPoints) => {
     // do something with the number of charging points on the map
     this.setState({ numberOfNewChargingPoints });
@@ -37,7 +41,9 @@ class MapPage extends React.Component {
             <Car />
             <Map
               numNewChargers={this.state.numberOfNewChargingPoints}
-              updateRegionName={this.updateRegionName.bind(this)} />
+              updateRegionName={this.updateRegionName.bind(this)}
+              showCalculator={this.showCalculator.bind(this)} />
+
             <Calculator 
               regionName={this.state.regionName}
               in={this.state.calculatorIn} 

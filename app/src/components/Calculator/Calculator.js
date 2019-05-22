@@ -7,6 +7,7 @@ class Calculator extends React.Component {
     super(props);
     this.formRef = React.createRef();
     this.state = { output: null }
+    this.SANITY_FACTOR = 0.1;
   }
 
   _numberOfChargersRequired = (data) => {
@@ -17,7 +18,10 @@ class Calculator extends React.Component {
                      0.288 * Number(data.get('percentageWhoLikeThisChargerType')) +
                     -0.024 * Number(data.get('chargingTimePerDay'))
 
-    return equation * Number(data.get('numberOfEvs')) - Number(data.get('existingChargingPoints'))
+    return(this.SANITY_FACTOR * 
+           equation * 
+           Number(data.get('numberOfEvs')) 
+         - Number(data.get('existingChargingPoints')))
   }
 
   _updateOutput = (value) => {
@@ -26,7 +30,13 @@ class Calculator extends React.Component {
 
   output = () => {
     if(this.state.output !== null) {
-      return <div className={"Calculator__output"}>You need to build <span className={"output__value"}>{this.state.output}</span> Charging Points.</div>
+      if(this.state.output < 0) {
+        return <div className={"Calculator__output"}>We need to remove <span className={"output__value"}>{0 - this.state.output}</span> Charging Points.</div>
+      } else if(this.state.output > 0) {
+        return <div className={"Calculator__output"}>We need to build <span className={"output__value"}>{this.state.output}</span> extra Charging Points.</div>
+      } else {
+        return <div className={"Calculator__output"}>We already have the perfect number of charging points.</div>
+      }
     } else {
       return null;
     }
