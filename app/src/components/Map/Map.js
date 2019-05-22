@@ -72,7 +72,8 @@ class Map extends React.Component {
             },
             'paint': {
                 'circle-color': '#69AEFF',
-                'circle-radius': 3
+                'circle-radius': 3,
+                'circle-opacity': 0.8
             },
             'minzoom': 5
         });
@@ -145,7 +146,8 @@ class Map extends React.Component {
                     66,
                     "#CF616F"
                 ],
-                'circle-radius': 10
+                'circle-radius': 3,
+                'circle-opacity': 0.8
             },
             'minzoom': 5
         });

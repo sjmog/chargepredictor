@@ -30,7 +30,13 @@ class Calculator extends React.Component {
 
   output = () => {
     if(this.state.output !== null) {
-      return <div className={"Calculator__output"}>You need to build <span className={"output__value"}>{this.state.output}</span> Charging Points.</div>
+      if(this.state.output < 0) {
+        return <div className={"Calculator__output"}>We need to remove <span className={"output__value"}>{0 - this.state.output}</span> Charging Points.</div>
+      } else if(this.state.output > 0) {
+        return <div className={"Calculator__output"}>We need to build <span className={"output__value"}>{this.state.output}</span> extra Charging Points.</div>
+      } else {
+        return <div className={"Calculator__output"}>We already have the perfect number of charging points.</div>
+      }
     } else {
       return null;
     }
