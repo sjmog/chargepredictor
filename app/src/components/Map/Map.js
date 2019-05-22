@@ -7,6 +7,7 @@ import geojson from './chargers.geojson';
 import regionGeojson from './regions.geojson';
 
 import './Map.css';
+import { generateRandomPoints } from './util';
 
 const MapboxMap = ReactMapboxGl({
     accessToken: process.env.REACT_APP_MAPBOX_ACCESS_TOKEN
@@ -18,26 +19,7 @@ const symbolLayout: MapboxGL.SymbolLayout = {
     'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],
     'text-offset': [0, 0.6],
     'text-anchor': 'top'
-  };
-  const symbolPaint: MapboxGL.SymbolPaint = {
-    'text-color': 'white'
-  };
-  
-  const circleLayout: MapboxGL.CircleLayout = { visibility: 'visible' };
-  const circlePaint: MapboxGL.CirclePaint = {
-    'circle-color': 'white'
-  };
-
-const regionsPaint: MapboxGL.FillPaint = {
-    'fill-color': 'rgba(74, 144, 226, 0.28)'
-}
-
-const regionLinePaint: MapboxGL.LinePaint = {
-    'line-color': 'rgb(74, 144, 226)',
-    'line-width': 3
-}
-
-
+};
 
 class Map extends React.Component {
     state = {
@@ -51,14 +33,49 @@ class Map extends React.Component {
             zoom: [6],
             pitch: [50],
             bearing: [-35]
-        }
+        },
+        numNewChargers: 0,
+        selectedPoly: undefined
     };
 
-    onRegionSelect = (evt) => {
-        let bounds = evt.target.getBounds();
-        console.log(evt);
-        // this.map.fitBounds([[ bounds._ne.lng, bounds._ne.lat ], [ bounds._sw.lng, bounds._sw.lat ]]);
-        // console.log(this.map)
+    componentDidUpdate(oldProps) {
+        if (this.state.selectedPoly == undefined) return;
+        let newPoints = generateRandomPoints(this.state.numNewChargers, this.state.selectedPoly);
+
+        let markers = newPoints.map(x => {
+            return {
+                'type': 'Feature',
+                'geometry': {
+                    'type': 'Point',
+                    'coordinates': x 
+                }
+            };
+        })
+        
+        this.removeMapLayer('new-chargers');
+        this.map.addLayer({
+            'id': 'new-chargers',
+            'type': 'circle',
+            'source': {
+                'type': 'geojson',
+                'data': {
+                    'type': 'FeatureCollection',
+                    'features': markers
+                }
+            },
+            'paint': {
+                'circle-color': 'blue'
+            },
+            'minzoom': 5
+        });
+    }
+
+    removeMapLayer(layer) {
+        var mapLayer = this.map.getLayer(layer);
+
+        if(typeof mapLayer !== 'undefined') {
+            this.map.removeLayer(layer).removeSource(layer);
+        }
     }
 
     onStyleLoad = (map, evt) => {
@@ -73,7 +90,66 @@ class Map extends React.Component {
             },
             'paint': {
                 'fill-color': 'rgba(74, 144, 226, 0.28)'
-            }
+            },
+            'maxzoom': 7
+        });
+
+        map.addLayer({
+            'id': 'regions-border-layer',
+            'type': 'line',
+            'source': {
+            'type': 'geojson',
+            'data': regionGeojson
+            },
+            'paint': {
+                'line-color': 'rgb(74, 144, 226)',
+                'line-width': 3
+            },
+            'maxzoom': 7
+        });
+
+        map.addSource("chargers", {
+            type: "geojson",
+            // Point to GeoJSON data. This example visualizes all M1.0+ earthquakes
+            // from 12/22/15 to 1/21/16 as logged by USGS' Earthquake hazards program.
+            data: geojson,
+            cluster: true,
+            clusterMaxZoom: 14, // Max zoom to cluster points on
+            clusterRadius: 100 // Radius of each cluster when clustering points (defaults to 50)
+        });
+
+        map.addLayer({
+            'id': 'chargers-layer',
+            'type': 'circle',
+            'source': "chargers",
+            'paint': {
+                'circle-color': 'white'
+            },
+            'minzoom': 5
+        });
+
+        map.addLayer({
+            id: "clusters",
+            type: "circle",
+            'source': "chargers",
+            'paint': {
+                'circle-color': 'white',
+                'circle-radius': 20
+            },
+            'minzoom': 5
+        });
+
+        map.addLayer({
+            id: "cluster-count",
+            type: "symbol",
+            source: "chargers",
+            filter: ["has", "point_count"],
+            layout: {
+                "text-field": "{point_count_abbreviated}",
+                "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
+                "text-size": 12
+            },
+            'minzoom': 5
         });
 
         map.on('click', 'regions-layer', function (e) {
@@ -86,7 +162,27 @@ class Map extends React.Component {
                 padding: 20
             });
 
-        });
+            this.removeMapLayer('selected-region');
+            map.addLayer({
+                'id': 'selected-region',
+                'type': 'line',
+                'source': {
+                    'type': 'geojson',
+                    'data': {
+                        'type': 'Feature',
+                        'geometry': {
+                            'type': 'Polygon',
+                            'coordinates': e.features[0].geometry.coordinates
+                        }
+                    }
+                },
+                'paint': {
+                    'line-color': 'rgb(74, 144, 226)',
+                    'line-width': 3
+                },
+                'minzoom': 7
+            })
+        }.bind(this));
     }
     
     render() {
@@ -94,25 +190,7 @@ class Map extends React.Component {
             <MapboxMap
                 className="map"
                 {...this.state.viewport}
-                onStyleLoad={this.onStyleLoad}>
-                <GeoJSONLayer
-                    data={geojson}
-                    circleLayout={circleLayout}
-                    circlePaint={circlePaint}
-                    circleOnClick={this.onClickCircle}
-                    symbolLayout={symbolLayout}
-                    symbolPaint={symbolPaint}
-                />
-                {/* <GeoJSONLayer
-                    data={regionGeojson}
-                    fillPaint={regionsPaint}
-                    fillOnClick={this.onRegionSelect}
-                /> */}
-                <GeoJSONLayer
-                    data={regionGeojson}
-                    linePaint={regionLinePaint}
-                />
-            </MapboxMap>
+                onStyleLoad={this.onStyleLoad} />
         )
     }
 }
