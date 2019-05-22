@@ -4,7 +4,19 @@ Predicts where to put charging points. Built for the EDF Future Systems Hackatho
 
 ## Running the application
 
-`cd` into the /app directory, `npm install`, and `npm start`.
+Before continuing, the project requires a Mapbox key, available for free for up to 50k monthly map impressions at https://mapbox.com
+
+Once a key has been acquired, run
+```
+export REACT_APP_MAPBOX_ACCESS_TOKEN="[MAPBOX_KEY_HERE]"
+```
+
+Then, `cd` into the /app directory and run
+```
+npm install
+npm start
+```
+to start the app.
 
 ### The idea
 
