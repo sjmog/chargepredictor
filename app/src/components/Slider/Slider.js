@@ -1,4 +1,5 @@
 import React from 'react';
+import './Slider.css';
 
 class Slider extends React.Component {
   constructor(props) {
@@ -8,7 +9,7 @@ class Slider extends React.Component {
   }
 
   onInput = () => {
-    const value = this.inputRef.current.value;
+    let value = this.inputRef.current.value;
 
     this.setState({ value: value })
 
@@ -17,19 +18,27 @@ class Slider extends React.Component {
 
   render() {
     return(
-      <fieldset>
+      <fieldset className={"Slider"}>
         <label htmlFor={this.props.name}>{this.props.label}</label>
-        <input 
-          ref={this.inputRef}
-          type={"range"} 
-          name={this.props.name}
-          min={Number(this.props.min)}
-          max={Number(this.props.max)} 
-          step={Number(this.props.step)}
-          defaultValue={Number(this.props.defaultValue)}
-          onInput={this.onInput}
-        />
-        <div className={"slider__output"}>{this.state.value}</div>
+        <div className={"Slider__holder"}>
+          <input 
+            ref={this.inputRef}
+            type={"range"} 
+            name={this.props.name}
+            min={Number(this.props.min)}
+            max={Number(this.props.max)} 
+            step={Number(this.props.step)}
+            defaultValue={Number(this.props.defaultValue)}
+            onInput={this.onInput}
+            className={"holder__range"}
+          />
+          <div className={"holder__output"}>
+            {this.props.isPercentage ? this.state.value * 100 : this.state.value}
+            <span className={"suffix"}>
+              {this.props.suffix}
+            </span>
+          </div>
+        </div>
       </fieldset>
     )
   }

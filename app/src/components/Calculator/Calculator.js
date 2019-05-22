@@ -26,7 +26,7 @@ class Calculator extends React.Component {
 
   output = () => {
     if(this.state.output !== null) {
-      return <div>You need to build {this.state.output} Charging Points.</div>
+      return <div className={"Calculator__output"}>You need to build <span className={"output__value"}>{this.state.output}</span> Charging Points.</div>
     } else {
       return null;
     }
@@ -77,6 +77,7 @@ class Calculator extends React.Component {
                 max={7} 
                 step={1}
                 defaultValue={3}
+                suffix={"h/day"}
                 onInput={this.processForm} />
 
               <Slider
@@ -86,6 +87,8 @@ class Calculator extends React.Component {
                 max={1} 
                 step={0.05}
                 defaultValue={0.15}
+                isPercentage={true}
+                suffix="%"
                 onInput={this.processForm} />
 
               <Slider
@@ -95,6 +98,7 @@ class Calculator extends React.Component {
                 max={1} 
                 step={0.1}
                 defaultValue={0.4}
+                suffix={"kWh/mi"}
                 onInput={this.processForm} />
 
               <Slider
@@ -104,18 +108,19 @@ class Calculator extends React.Component {
                 max={100} 
                 step={10}
                 defaultValue={40}
+                suffix={"mi/day"}
                 onInput={this.processForm} />
 
               <Slider
                 name={"percentageWhoLikeThisChargerType"} 
                 label={"Fraction of EV owners who like this charger type"}
-                min={0} 
+                min={0.5} 
                 max={1} 
                 step={0.1}
                 defaultValue={0.9}
+                isPercentage={true}
+                suffix={"%"}
                 onInput={this.processForm} />
-
-              <button type="submit">Go</button>
             </form>
 
             {this.output()}
